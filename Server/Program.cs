@@ -31,10 +31,10 @@ namespace Server
 
         public static void Messenger()
         {
-             string ip = "127.0.0.1";
+             
              int port = 8085;
             
-            EndPoint endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+            EndPoint endPoint = new IPEndPoint(IPAddress.Parse(ipClient), port);
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             socket.Bind(endPoint);

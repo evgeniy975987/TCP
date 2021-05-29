@@ -19,45 +19,39 @@ namespace Client
         IPEndPoint ReceiveEndPoint;
         UdpClient udpSender;
 
+       
+        int port = 8085;
+        EndPoint tcpEndPoint ;
+        Socket tcpSocket  ;
         public Messanger()
         {
-
-
             ReceiveEndPoint = new IPEndPoint(IPAddress.Parse(IPserver), portServer); ;
-
             udpSender = FileWoker.udpSender;
 
+            tcpEndPoint = new IPEndPoint(IPAddress.Parse(IPserver), port);
+            tcpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            tcpSocket.Connect(tcpEndPoint);
 
         }
         public void SendMessage(string message)
         {
-            string ip = "127.0.0.1";
-            int port = 8085;
+            
             try
             {
-
-                EndPoint endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
-                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-
-                socket.Connect(endPoint);
-
-                int size;
-
                 
 
-
+                int size;
                     var data = Encoding.UTF8.GetBytes(message);
-                    socket.Send(data);
+                    tcpSocket.Send(data);
                     byte[] buffer = new byte[32];
 
                     var answer = new StringBuilder();
                     do
                     {
-                        size = socket.Receive(buffer);
+                        size = tcpSocket.Receive(buffer);
                         answer.Append(Encoding.UTF8.GetString(buffer, 0, size));
                     }
-                    while (socket.Available > 0);
+                    while (tcpSocket.Available > 0);
 
                     Console.WriteLine(answer);
                 }
