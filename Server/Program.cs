@@ -19,9 +19,8 @@ namespace Server
         {
             List<Task> tasks = new List<Task>();
 
-            //tasks.Add(new Task(() => { Messenger(); }));
-            Task task = Task.Run(() => { Messenger(); });
-            tasks.Add(task);
+           
+            
             
             Task T = Task.Run(() => { GetFile(); });
              tasks.Add(T);
@@ -29,34 +28,7 @@ namespace Server
             Task.WaitAll(tasks.ToArray());
         }
 
-        public static void Messenger()
-        {
-             
-             int port = 8085;
-            
-            EndPoint endPoint = new IPEndPoint(IPAddress.Parse(ipClient), port);
-            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-            socket.Bind(endPoint);
-            socket.Listen(5);
-            var listener = socket.Accept();
-            byte[] buffer = new byte[64];
-            int size = 0;
-
-            while (true)
-            {
-                var data = new StringBuilder();
-                do
-                {
-                    size = listener.Receive(buffer);
-                    data.Append(Encoding.UTF8.GetString(buffer, 0, size));
-                }
-                while (listener.Available > 0);
-                Console.WriteLine(data);
-                listener.Send(Encoding.UTF8.GetBytes("успех"));
-
-            }
-        }
+       
 
         public static void GetFile()
         {
